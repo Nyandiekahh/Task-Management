@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useActivityLog } from '../../hooks/useActivityLog';
 import { useAuth } from '../../contexts/AuthContext';
 import Loading from '../../components/common/Loading'; // Fixed import path
-import './Dashboard.css';
+import '../../styles/components/dashboard.css';
 
 
 function ActivityLog() {

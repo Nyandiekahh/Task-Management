@@ -1,68 +1,174 @@
-.login-form-container {
+/* Refined Government Login Styling */
+
+:root {
+    --primary-color: #2C3E50;
+    --secondary-color: #34495E;
+    --accent-color: #927F54;
+    --background: #F5F5F5;
+    --text-dark: #2C3E50;
+    --text-light: #ECF0F1;
+    --border: #E0E0E0;
+    --error: #C0392B;
+}
+
+.login-page {
+    min-height: 100vh;
+    background: var(--background);
+    padding: 0;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.official-header {
     background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border);
+    padding: 0.5rem 0;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 2rem;
+}
+
+.official-seal {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title {
+    color: var(--text-dark);
+    font-size: 1.25rem;
+    font-weight: normal;
+}
+
+.login-container {
     width: 100%;
     max-width: 400px;
+    margin: 120px auto 50px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.login-container h1 {
+    background: var(--primary-color);
+    color: var(--text-light);
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: normal;
+    border-bottom: 1px solid var(--border);
+}
+
+.login-form-container {
+    padding: 2rem;
+    background: white;
+}
+
+.official-notice {
+    background: #FFF9E6;
+    border: 1px solid #E5DABE;
+    padding: 0.75rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: var(--text-dark);
+    border-radius: 4px;
 }
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .form-group label {
-    color: #333;
-    font-weight: 500;
+    display: block;
+    color: var(--text-dark);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
 }
 
 .form-group input {
+    width: 100%;
     padding: 0.75rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border);
     border-radius: 4px;
     font-size: 1rem;
+    background: white;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-}
-
-.error-message {
-    color: #dc3545;
-    background-color: #fff5f5;
-    padding: 0.75rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    text-align: center;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1);
 }
 
 .login-button {
-    background-color: #4a90e2;
+    background: var(--primary-color);
     color: white;
-    padding: 0.875rem;
+    padding: 0.75rem;
     border: none;
-    border-radius: 4px;
+    width: 100%;
     font-size: 1rem;
-    font-weight: 500;
     cursor: pointer;
+    border-radius: 4px;
     transition: background-color 0.2s;
 }
 
 .login-button:hover {
-    background-color: #357abd;
+    background: var(--secondary-color);
 }
 
 .login-button:disabled {
-    background-color: #ccc;
+    background: #E0E0E0;
     cursor: not-allowed;
+}
+
+.error-message {
+    background: #FFEBEE;
+    border: 1px solid var(--error);
+    color: var(--error);
+    padding: 0.75rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.login-footer {
+    text-align: center;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: #666;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        margin: 100px 1rem 2rem;
+    }
+    
+    .header-content {
+        padding: 0 1rem;
+    }
+    
+    .login-form-container {
+        padding: 1.5rem;
+    }
 }

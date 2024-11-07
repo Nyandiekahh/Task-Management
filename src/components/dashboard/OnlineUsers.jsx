@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { userService } from '../../services/userService';
 import Loading from '../../components/common/Loading';
-import './Dashboard.css';
+import '../../styles/components/dashboard.css';
 
 function OnlineUsers() {
     const [users, setUsers] = useState([]);

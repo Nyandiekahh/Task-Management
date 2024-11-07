@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { taskService } from '../../services/taskService';
 import Loading from '../common/Loading';
-import './Dashboard.css';
+import '../../styles/components/dashboard.css';
 
 function UserStats() {
     const { user } = useAuth();

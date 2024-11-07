@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { TaskProvider } from './contexts/TaskContext';
 import { NotificationProvider } from './contexts/NotificationContext';
@@ -19,19 +19,17 @@ function App() {
         <NotificationProvider>
           <TaskProvider>
             <Routes>
+              {/* Public route */}
               <Route path="/login" element={<LoginPage />} />
               
+              {/* Protected routes */}
               <Route path="/" element={
                 <ProtectedRoute>
                   <MainLayout />
                 </ProtectedRoute>
               }>
                 <Route index element={<DashboardPage />} />
-                <Route path="tasks" element={
-                  <ProtectedRoute requiredPermission="view_tasks">
-                    <TasksPage />
-                  </ProtectedRoute>
-                } />
+                <Route path="tasks" element={<TasksPage />} />
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="admin" element={
                   <ProtectedRoute requiredRole="admin">
@@ -39,6 +37,9 @@ function App() {
                   </ProtectedRoute>
                 } />
               </Route>
+
+              {/* Redirect unmatched routes to dashboard */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </TaskProvider>
         </NotificationProvider>
