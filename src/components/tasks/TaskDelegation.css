@@ -1,0 +1,149 @@
+.delegation-form {
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 8px;
+}
+
+.delegation-form h3 {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.delegation-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.delegation-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.delegation-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background-color: white;
+    cursor: pointer;
+}
+
+.delegation-select:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.delegation-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.delegation-select:focus,
+.delegation-textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.error-message {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: 4px;
+    background-color: #fff5f5;
+    color: #dc3545;
+    font-size: 0.875rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.button-secondary {
+    padding: 0.75rem 1.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.button-primary {
+    padding: 0.75rem 1.5rem;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.button-primary:hover {
+    background-color: #357abd;
+}
+
+.button-secondary:hover {
+    background-color: #e9ecef;
+}
+
+.button-primary:disabled,
+.button-secondary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.button-primary.loading {
+    position: relative;
+    color: transparent;
+}
+
+.button-primary.loading::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: button-loading 0.75s infinite linear;
+}
+
+@keyframes button-loading {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .delegation-form {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}

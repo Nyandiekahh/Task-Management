@@ -1,70 +1,190 @@
-# Getting Started with Create React App
+# Task Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive task management system built with React that allows organizations to manage tasks, users, and roles with different permission levels.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+### Authentication & Authorization
+- Role-based access control (Admin, Manager, User)
+- Secure login system
+- Protected routes
+- Permission-based feature access
 
-### `npm start`
+### User Management
+- User creation and management
+- Role assignment
+- User status management (Active/Inactive)
+- User profile management
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Task Management
+- Create and assign tasks
+- Task delegation
+- Priority levels (High, Medium, Low)
+- Task status tracking (Pending, In Progress, Completed)
+- Task filtering and sorting
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Role Management
+- Customizable roles and permissions
+- Role-based access control
+- Permission management
+- Role assignment to users
 
-### `npm test`
+### Dashboard
+- Task statistics
+- User activity tracking
+- Online users monitoring
+- Task completion metrics
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Activity Logging
+- User action tracking
+- Task status changes
+- Task assignments and delegations
+- System-wide activity monitoring
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend:** React.js
+- **State Management:** React Context API
+- **Routing:** React Router v6
+- **Styling:** CSS3 with modern features
+- **Authentication:** Custom JWT implementation (mock for development)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm/yarn
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+# Clone the repository
+git clone [repository-url]
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Navigate to project directory
+cd task-management-system
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Install dependencies
+npm install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Running the Application
 
-## Learn More
+```bash
+# Start development server
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The application will start running at `http://localhost:3000`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Default Login Credentials
 
-### Code Splitting
+```plaintext
+Admin User:
+- Username: admin
+- Password: admin123
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Manager User:
+- Username: manager
+- Password: manager123
 
-### Analyzing the Bundle Size
+Regular User:
+- Username: user
+- Password: user123
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Project Structure
 
-### Making a Progressive Web App
+```
+task-management-system/
+├── src/
+│   ├── components/
+│   │   ├── auth/
+│   │   ├── common/
+│   │   ├── dashboard/
+│   │   └── tasks/
+│   ├── contexts/
+│   ├── hooks/
+│   ├── layouts/
+│   ├── pages/
+│   ├── services/
+│   ├── styles/
+│   └── utils/
+├── public/
+└── package.json
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Key Directories
 
-### Advanced Configuration
+- `components/`: Reusable UI components
+- `contexts/`: React Context providers
+- `hooks/`: Custom React hooks
+- `layouts/`: Page layout components
+- `pages/`: Main page components
+- `services/`: API and service integrations
+- `styles/`: CSS styles
+- `utils/`: Utility functions and helpers
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Features in Detail
 
-### Deployment
+### User Roles
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. **Admin**
+   - Full system access
+   - User management
+   - Role management
+   - System settings
 
-### `npm run build` fails to minify
+2. **Manager**
+   - Task creation and assignment
+   - Task delegation
+   - Report viewing
+   - Team management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. **User**
+   - Task viewing and updating
+   - Basic task operations
+   - Profile management
+
+### Task Management
+
+- Create new tasks
+- Assign tasks to users
+- Set task priorities
+- Update task status
+- Task delegation
+- Task filtering and search
+- Task analytics
+
+### Dashboard Features
+
+- Task statistics
+- User activity tracking
+- Online user monitoring
+- Recent activities
+- Performance metrics
+
+## Contributing
+
+Guidelines for contributing to this project:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Future Enhancements
+
+- [ ] Real-time notifications
+- [ ] Email notifications
+- [ ] Task comments and attachments
+- [ ] Advanced reporting
+- [ ] Team management
+- [ ] Project management features
+- [ ] Mobile responsive design
+- [ ] Dark mode support
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
