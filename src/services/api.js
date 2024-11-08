@@ -1,5 +1,3 @@
-// src/services/api.js
-
 import { authService } from './authService';
 
 const API_URL = 'http://localhost:8000/api';
@@ -61,15 +59,54 @@ class ApiService {
         return data;
     }
 
+    // Auth Related
+    async verifyToken(token) {
+        return this.request(`/auth/verify-token/${token}/`, {
+            method: 'GET'
+        });
+    }
+
+    async setPassword(token, password) {
+        return this.request('/auth/set-password/', {
+            method: 'POST',
+            body: JSON.stringify({ token, password })
+        });
+    }
+
     // Users
     async getUsers() {
-        return this.request('/users/');
+        return this.request('/auth/users/');
+    }
+
+    async createUser(userData) {
+        return this.request('/auth/users/', {
+            method: 'POST',
+            body: JSON.stringify(userData),
+        });
     }
 
     async updateUser(userId, userData) {
-        return this.request(`/users/${userId}/`, {
+        return this.request(`/auth/users/${userId}/`, {
             method: 'PUT',
             body: JSON.stringify(userData),
+        });
+    }
+
+    async deleteUser(userId) {
+        return this.request(`/auth/users/${userId}/`, {
+            method: 'DELETE',
+        });
+    }
+
+    async activateUser(userId) {
+        return this.request(`/auth/users/${userId}/activate/`, {
+            method: 'POST',
+        });
+    }
+
+    async deactivateUser(userId) {
+        return this.request(`/auth/users/${userId}/deactivate/`, {
+            method: 'POST',
         });
     }
 
@@ -132,6 +169,31 @@ class ApiService {
     async markNotificationRead(notificationId) {
         return this.request(`/notifications/${notificationId}/read/`, {
             method: 'POST',
+        });
+    }
+
+    // Roles
+    async getRoles() {
+        return this.request('/auth/roles/');
+    }
+
+    async createRole(roleData) {
+        return this.request('/auth/roles/', {
+            method: 'POST',
+            body: JSON.stringify(roleData),
+        });
+    }
+
+    async updateRole(roleId, roleData) {
+        return this.request(`/auth/roles/${roleId}/`, {
+            method: 'PUT',
+            body: JSON.stringify(roleData),
+        });
+    }
+
+    async deleteRole(roleId) {
+        return this.request(`/auth/roles/${roleId}/`, {
+            method: 'DELETE',
         });
     }
 }

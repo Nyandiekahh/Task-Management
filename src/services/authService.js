@@ -1,10 +1,10 @@
-// src/services/authService.js
-
 const API_URL = 'http://localhost:8000/api';
 
-export const authService = {
-    login: async (credentials) => {
+class AuthService {
+    async login(credentials) {
         try {
+            console.log('Sending login request with:', credentials);
+            
             const response = await fetch(`${API_URL}/auth/login/`, {
                 method: 'POST',
                 headers: {
@@ -12,13 +12,17 @@ export const authService = {
                 },
                 body: JSON.stringify(credentials)
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Invalid credentials');
-            }
-
+    
+            console.log('Login response status:', response.status);
             const data = await response.json();
+            console.log('Login response data:', data);
+    
+            if (!response.ok) {
+                throw new Error(data.error || 'Invalid credentials');
+            }
+    
+            this.setTokens(data.token, data.refresh);
+            // Return the complete response data
             return {
                 userData: data.userData,
                 token: data.token,
@@ -28,47 +32,35 @@ export const authService = {
             console.error('Login error:', error);
             throw error;
         }
-    },
+    }
 
-    logout: async () => {
-        // No need to call backend for logout with JWT
-        // Just clear local storage in sessionManager
-    },
-
-    getUserDetails: async (userId) => {
+    async verifyOTP(email, otp, password) {
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/auth/users/${userId}/`, {
+            const response = await fetch(`${API_URL}/auth/users/verify-otp/`, {
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp, password })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to fetch user details');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'OTP verification failed');
             }
 
             return await response.json();
         } catch (error) {
-            console.error('Get user details error:', error);
+            console.error('OTP verification error:', error);
             throw error;
         }
-    },
+    }
 
-    verifyToken: async (token) => {
-        if (!token) return false;
-        
-        try {
-            // Simple JWT expiration check
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return payload.exp * 1000 > Date.now();
-        } catch {
-            return false;
-        }
-    },
+    async logout() {
+        this.clearTokens();
+    }
 
-    refreshToken: async () => {
+    async refreshToken() {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
             
@@ -89,16 +81,60 @@ export const authService = {
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.access);
+            this.setTokens(data.access, refreshToken);
             return data.access;
         } catch (error) {
             console.error('Token refresh error:', error);
+            this.clearTokens();
             throw error;
         }
-    },
+    }
 
-    getAuthHeader: () => {
-        const token = localStorage.getItem('token');
+    async verifyToken(token) {
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
+        } catch {
+            return false;
+        }
+    }
+
+    setTokens(accessToken, refreshToken) {
+        if (accessToken) localStorage.setItem('token', accessToken);
+        if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+    }
+
+    clearTokens() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+    }
+
+    getToken() {
+        return localStorage.getItem('token');
+    }
+
+    getRefreshToken() {
+        return localStorage.getItem('refreshToken');
+    }
+
+    isAuthenticated() {
+        const token = this.getToken();
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
+        } catch {
+            return false;
+        }
+    }
+
+    getAuthHeader() {
+        const token = this.getToken();
         return token ? { 'Authorization': `Bearer ${token}` } : {};
     }
-};
+}
+
+export const authService = new AuthService();

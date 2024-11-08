@@ -1,5 +1,3 @@
-// src/contexts/AuthContext.jsx
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
@@ -13,47 +11,82 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Check for existing session on mount
         const checkAuth = async () => {
             try {
                 const sessionData = sessionManager.getSessionData();
                 if (sessionData && sessionData.token) {
-                    // Verify token validity
                     const isValid = await authService.verifyToken(sessionData.token);
-                    if (isValid) {
+                    if (isValid && sessionData.user) {
                         setUser(sessionData.user);
+                        if (window.location.pathname === '/login') {
+                            handleRedirect(sessionData.user);
+                        }
                     } else {
-                        // Try to refresh the token
                         try {
                             await authService.refreshToken();
-                            setUser(sessionData.user);
+                            if (sessionData.user) {
+                                setUser(sessionData.user);
+                            }
                         } catch (error) {
                             console.error('Token refresh failed:', error);
-                            sessionManager.clearSession();
+                            await logout();
                         }
                     }
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
-                sessionManager.clearSession();
+                await logout();
             } finally {
                 setLoading(false);
             }
         };
 
         checkAuth();
-    }, []);
+    }, [navigate]);
+
+    const handleRedirect = (userData) => {
+        if (!userData) {
+            console.error('No user data available for redirect');
+            return;
+        }
+
+        console.log('Redirecting user with role:', userData.role);
+        
+        switch (userData.role) {
+            case 'admin':
+                navigate('/admin');
+                break;
+            case 'manager':
+                navigate('/dashboard');
+                break;
+            case 'user':
+                navigate('/tasks');
+                break;
+            default:
+                navigate('/');
+                break;
+        }
+    };
 
     const login = async (credentials) => {
         try {
             setLoading(true);
-            const { userData, token, refresh } = await authService.login(credentials);
+            const response = await authService.login(credentials);
             
-            // Initialize session with both tokens
-            sessionManager.initSession(userData, token, refresh);
-            setUser(userData);
+            if (!response || !response.userData || !response.token) {
+                throw new Error('Invalid response data');
+            }
+
+            // Initialize session with response data
+            sessionManager.initSession(response.userData, response.token, response.refresh);
             
-            return userData;
+            // Update local state
+            setUser(response.userData);
+            
+            // Handle redirect
+            handleRedirect(response.userData);
+            
+            return response.userData;
         } catch (error) {
             console.error('Login failed:', error);
             throw error;
@@ -70,14 +103,10 @@ export const AuthProvider = ({ children }) => {
             navigate('/login', { replace: true });
         } catch (error) {
             console.error('Logout failed:', error);
-        }
-    };
-
-    const updateUserData = (newUserData) => {
-        setUser(newUserData);
-        const sessionData = sessionManager.getSessionData();
-        if (sessionData) {
-            sessionManager.initSession(newUserData, sessionData.token, sessionData.refreshToken);
+            // Clear session anyway
+            sessionManager.clearSession();
+            setUser(null);
+            navigate('/login', { replace: true });
         }
     };
 
@@ -87,7 +116,6 @@ export const AuthProvider = ({ children }) => {
             loading,
             login,
             logout,
-            updateUserData,
             isAuthenticated: !!user
         }}>
             {children}

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import Loading from '../components/common/Loading';
 import Modal from '../components/common/Modal';
+// Update the import path for AddUserForm
+import AddUserForm from '../components/admin/AddUserForm';
 import '../styles/components/admin.css';
-
 
 function AdminPage() {
     const { user } = useAuth();
@@ -15,7 +15,7 @@ function AdminPage() {
         { id: 2, username: 'user', name: 'Regular User', role: 'user', status: 'active' },
         { id: 3, username: 'manager', name: 'Manager', role: 'manager', status: 'active' },
     ]);
-    const [roles, setRoles] = useState([
+    const [roles] = useState([
         { id: 1, name: 'admin', description: 'Full system access', permissions: ['all'] },
         { id: 2, name: 'manager', description: 'Task management and delegation', permissions: ['create_task', 'assign_task', 'view_reports'] },
         { id: 3, name: 'user', description: 'Basic task operations', permissions: ['view_task', 'update_task'] },
@@ -32,13 +32,14 @@ function AdminPage() {
     }
 
     const handleAddUser = async (userData) => {
-        // In a real app, this would be an API call
         setLoading(true);
         try {
             const newUser = {
                 id: users.length + 1,
                 ...userData,
-                status: 'active'
+                status: 'active',
+                // Combine first_name and last_name for display
+                name: `${userData.first_name} ${userData.last_name}`
             };
             setUsers([...users, newUser]);
             setShowAddUser(false);
@@ -208,139 +209,6 @@ function AdminPage() {
                 </Modal>
             )}
         </div>
-    );
-}
-
-// AddUserForm Component
-function AddUserForm({ onSubmit, onCancel, roles, loading }) {
-    const [formData, setFormData] = useState({
-        username: '',
-        name: '',
-        email: '',
-        role: 'user',
-        password: '',
-        confirmPassword: ''
-    });
-    const [error, setError] = useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-        onSubmit(formData);
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="add-user-form">
-            <h3>Add New User</h3>
-            
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="role">Role</label>
-                <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    required
-                >
-                    {roles.map(role => (
-                        <option key={role.id} value={role.name}>
-                            {role.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            {error && <div className="error-message">{error}</div>}
-
-            <div className="form-actions">
-                <button 
-                    type="button" 
-                    onClick={onCancel}
-                    className="button-secondary"
-                    disabled={loading}
-                >
-                    Cancel
-                </button>
-                <button 
-                    type="submit"
-                    className="button-primary"
-                    disabled={loading}
-                >
-                    {loading ? 'Adding User...' : 'Add User'}
-                </button>
-            </div>
-        </form>
     );
 }
 

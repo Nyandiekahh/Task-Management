@@ -74,7 +74,7 @@ body {
 }
 
 /* Form Container */
-.login-form {
+.login-form, .set-password-form {
   padding: 1.5rem;
 }
 
@@ -106,8 +106,8 @@ body {
   box-shadow: 0 0 0 2px rgba(0, 133, 62, 0.1);
 }
 
-/* Login Button */
-.login-button {
+/* Buttons */
+.login-button, .set-password-button {
   width: 100%;
   padding: 0.75rem;
   background: var(--green);
@@ -120,16 +120,16 @@ body {
   transition: background-color 0.2s;
 }
 
-.login-button:hover {
+.login-button:hover, .set-password-button:hover {
   background: var(--light-green);
 }
 
-.login-button:focus {
+.login-button:focus, .set-password-button:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 133, 62, 0.2);
 }
 
-.login-button:disabled {
+.login-button:disabled, .set-password-button:disabled {
   background: #E9ECEF;
   cursor: not-allowed;
 }
@@ -144,6 +144,54 @@ body {
   color: var(--error);
   font-size: 0.875rem;
   text-align: center;
+}
+
+/* Password Requirements */
+.password-requirements {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--light-gray);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.password-requirements h4 {
+  color: var(--text);
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.password-requirements ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.password-requirements li {
+  margin: 0.25rem 0;
+}
+
+/* Invalid Token Message */
+.invalid-token {
+  text-align: center;
+  padding: 2rem;
+}
+
+.invalid-token h2 {
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+.invalid-token .back-to-login {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--green);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 1rem;
 }
 
 /* Footer */
@@ -171,15 +219,15 @@ body {
 /* Responsive Design */
 @media (max-width: 480px) {
   .main-container {
-      margin: 1rem;
-      border-radius: 4px;
+    margin: 1rem;
+    border-radius: 4px;
   }
 
   .header {
-      padding: 1rem;
+    padding: 1rem;
   }
 
   .header-title {
-      font-size: 1.1rem;
+    font-size: 1.1rem;
   }
 }

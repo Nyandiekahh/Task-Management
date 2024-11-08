@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage';
 import TasksPage from './pages/TasksPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
+import SetPasswordPage from './pages/SetPasswordPage';
 import MainLayout from './layouts/MainLayout';
 import './App.css';
 
@@ -19,8 +20,9 @@ function App() {
         <NotificationProvider>
           <TaskProvider>
             <Routes>
-              {/* Public route */}
+              {/* Public routes */}
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/set-password/:token" element={<SetPasswordPage />} />
               
               {/* Protected routes */}
               <Route path="/" element={

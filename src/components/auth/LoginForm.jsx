@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './LoginForm.css';
 
 const LoginForm = () => {
-  const navigate = useNavigate();
   const { login } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -18,7 +16,7 @@ const LoginForm = () => {
 
     try {
       await login(credentials);
-      navigate('/');
+      // No need for navigate here - AuthContext handles redirection
     } catch (err) {
       setError('Invalid username or password');
       console.error('Login error:', err);
