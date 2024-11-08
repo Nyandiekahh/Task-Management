@@ -1,83 +1,104 @@
-import { v4 as uuidv4 } from 'uuid'; // You'll need to install this: npm install uuid
+// src/services/authService.js
 
-// Mock user data with roles and permissions
-const users = [
-    {
-        id: 1,
-        username: 'admin',
-        password: 'admin123',
-        name: 'Admin User',
-        role: 'admin',
-        permissions: ['all'],
-        email: 'admin@example.com'
-    },
-    {
-        id: 2,
-        username: 'manager',
-        password: 'manager123',
-        name: 'Manager User',
-        role: 'manager',
-        permissions: ['create_task', 'edit_task', 'assign_task', 'view_all_tasks', 'view_reports'],
-        email: 'manager@example.com'
-    },
-    {
-        id: 3,
-        username: 'user',
-        password: 'user123',
-        name: 'Regular User',
-        role: 'user',
-        permissions: ['create_task', 'edit_task'],
-        email: 'user@example.com'
-    }
-];
+const API_URL = 'http://localhost:8000/api';
 
 export const authService = {
     login: async (credentials) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        try {
+            const response = await fetch(`${API_URL}/auth/login/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials)
+            });
 
-        const user = users.find(
-            u => u.username === credentials.username && u.password === credentials.password
-        );
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Invalid credentials');
+            }
 
-        if (user) {
-            const { password, ...userWithoutPassword } = user;
-            // Generate a mock token
-            const token = uuidv4();
-            
+            const data = await response.json();
             return {
-                userData: userWithoutPassword,
-                token: token
+                userData: data.userData,
+                token: data.token,
+                refresh: data.refresh
             };
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
         }
-        throw new Error('Invalid credentials');
     },
 
     logout: async () => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // In a real app, you would invalidate the token on the server
+        // No need to call backend for logout with JWT
+        // Just clear local storage in sessionManager
     },
 
     getUserDetails: async (userId) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        const user = users.find(u => u.id === userId);
-        if (!user) throw new Error('User not found');
-        
-        const { password, ...userDetails } = user;
-        return userDetails;
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/auth/users/${userId}/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch user details');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Get user details error:', error);
+            throw error;
+        }
     },
 
-    // Verify token validity (mock implementation)
     verifyToken: async (token) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return true; // In a real app, you would verify the token with your backend
+        if (!token) return false;
+        
+        try {
+            // Simple JWT expiration check
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
+        } catch {
+            return false;
+        }
     },
 
-    // Refresh token (mock implementation)
-    refreshToken: async (refreshToken) => {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        return {
-            token: uuidv4(),
-            refreshToken: uuidv4()
-        };
+    refreshToken: async () => {
+        try {
+            const refreshToken = localStorage.getItem('refreshToken');
+            
+            if (!refreshToken) {
+                throw new Error('No refresh token available');
+            }
+
+            const response = await fetch(`${API_URL}/auth/token/refresh/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ refresh: refreshToken })
+            });
+
+            if (!response.ok) {
+                throw new Error('Unable to refresh token');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.access);
+            return data.access;
+        } catch (error) {
+            console.error('Token refresh error:', error);
+            throw error;
+        }
+    },
+
+    getAuthHeader: () => {
+        const token = localStorage.getItem('token');
+        return token ? { 'Authorization': `Bearer ${token}` } : {};
     }
 };
