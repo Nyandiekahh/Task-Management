@@ -1,3 +1,4 @@
+// components/dashboard/TaskList.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTasks } from '../../contexts/TaskContext';
@@ -5,21 +6,29 @@ import Loading from '../common/Loading';
 import '../../styles/components/dashboard.css';
 
 function TaskList() {
-    const { tasks, loading, error, updateTaskStatus } = useTasks();
+    const { tasks = [], loading, error, updateTaskStatus } = useTasks();
     const { user } = useAuth();
     const [filter, setFilter] = useState('all');
 
     const getFilteredTasks = () => {
+        if (!Array.isArray(tasks)) {
+            console.error('Tasks is not an array:', tasks);
+            return [];
+        }
+
         // First filter by user role/ownership
         const userTasks = user?.role === 'admin' 
             ? tasks 
-            : tasks.filter(task => task.assignedTo === user?.username || task.assignedBy === user?.username);
+            : tasks.filter(task => 
+                task.assigned_to === user?.username || 
+                task.assigned_by === user?.username
+            );
 
         // Then filter by status
-        return userTasks.filter(task => {
+        return Array.isArray(userTasks) ? userTasks.filter(task => {
             if (filter === 'all') return true;
             return task.status === filter;
-        });
+        }) : [];
     };
 
     const handleStatusChange = async (taskId, newStatus) => {
@@ -30,7 +39,7 @@ function TaskList() {
         }
     };
 
-    if (loading && tasks.length === 0) {
+    if (loading && (!tasks || tasks.length === 0)) {
         return <Loading message="Loading tasks..." />;
     }
 
@@ -91,12 +100,12 @@ function TaskList() {
                             
                             <div className="task-meta">
                                 <div className="task-dates">
-                                    <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
-                                    <span>Created: {new Date(task.createdAt).toLocaleDateString()}</span>
+                                    <span>Due: {new Date(task.due_date).toLocaleDateString()}</span>
+                                    <span>Created: {new Date(task.created_at).toLocaleDateString()}</span>
                                 </div>
                                 <div className="task-assignments">
-                                    <span>By: {task.assignedBy}</span>
-                                    <span>To: {task.assignedTo}</span>
+                                    <span>By: {task.assigned_by}</span>
+                                    <span>To: {task.assigned_to}</span>
                                 </div>
                             </div>
 
